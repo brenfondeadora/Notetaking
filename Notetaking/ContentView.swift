@@ -35,7 +35,7 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    Button(action: addNoteEntry) {
+                    Button(action: PersistenceController.shared.addNoteEntry) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
