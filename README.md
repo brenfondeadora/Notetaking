@@ -3,7 +3,6 @@
 <p align="center">
 <a href="#">
 <img src="images/appTakeNotes.gif" height="500"> 
-<br><br>
 </a>  
 <br><br>
 Mac app developed with SwiftUI using CoreData
