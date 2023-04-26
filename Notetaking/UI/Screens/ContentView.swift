@@ -10,36 +10,93 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
+    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \NoteEntry.createdAt, ascending: true)],
         animation: .default)
     private var items: FetchedResults<NoteEntry>
-
+    
     var body: some View {
         NavigationView {
             List {
                 ForEach(items) { item in
-                    if let title = item.title,
-                       let content = item.content,
-                       let updatedAt = item.updatedAt {
-                        NavigationLink {
-                            Text(content)
-                        } label: {
-                            Text(title)
-                            Text(updatedAt, formatter: itemFormatter)
-                        }
-                    }
+                    NoteEntryView(noteEntry: item)
                 }
             }
             .toolbar {
                 ToolbarItem {
                     Button(action: PersistenceController.shared.addNoteEntry) {
-                        Label("Add Item", systemImage: "plus")
+                        Label("Add Note", systemImage: "plus")
                     }
                 }
             }
             Text("Select a note")
+        }
+    }
+}
+
+struct NoteEntryView: View {
+    @ObservedObject var noteEntry: NoteEntry
+    
+    @State private var titleInput: String = ""
+    @State private var contentInput: String = ""
+    
+    @State private var shouldShowDeleteButton: Bool = false
+    @State private var shouldPresentConfirm: Bool = false
+    
+    var body: some View {
+        if let title = noteEntry.title,
+           let updatedAt = noteEntry.updatedAt,
+           let content = noteEntry.content {
+            NavigationLink {
+                VStack {
+                    TextField("Title", text: $titleInput)
+                        .onAppear() {
+                            self.titleInput = title
+                        }
+                        .onChange(of: titleInput) { newTitle in
+                            PersistenceController.shared.updateNoteEntry(
+                                noteEntry: noteEntry,
+                                title: newTitle,
+                                content: contentInput)
+                        }
+                    
+                    TextEditor(text: $contentInput)
+                        .onAppear() {
+                            self.contentInput = content
+                        }
+                        .onChange(of: contentInput) { newContent in
+                            PersistenceController.shared.updateNoteEntry(
+                                noteEntry: noteEntry,
+                                title: titleInput,
+                                content: newContent)
+                        }
+                }
+                
+            } label: {
+                HStack {
+                    Text(title)
+                    Text(updatedAt, formatter: itemFormatter)
+                    Spacer()
+                    if shouldShowDeleteButton || shouldPresentConfirm {
+                        Button {
+                            shouldPresentConfirm = true
+                        } label: {
+                            Image(systemName: "minus.circle")
+                        }.buttonStyle(.plain)
+                            .confirmationDialog("Are you sure?",
+                                                isPresented: $shouldPresentConfirm) {
+                                Button("Delete this note", role: .destructive) {
+                                    PersistenceController.shared.deleteNoteEntry(
+                                        noteEntry: noteEntry)
+                                }
+                            }
+                    }
+                }.onHover { isHover in
+                    shouldShowDeleteButton = isHover
+                }
+                
+            }
         }
     }
 }

@@ -59,8 +59,8 @@
 				233CF88429F9D52D004A001F /* CoreData */,
 				233CF88229F9D4E7004A001F /* UI */,
 				233CF86E29F9B159004A001F /* NotetakingApp.swift */,
+				233CF87C29F9B15D004A001F /* Notetaking.entitlements */,
 				233CF87229F9B15D004A001F /* Assets.xcassets */,
-				233CF87929F9B15D004A001F /* Notetaking.xcdatamodeld */,
 				233CF87429F9B15D004A001F /* Preview Content */,
 			);
 			path = Notetaking;
@@ -93,8 +93,8 @@
 		233CF88429F9D52D004A001F /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				233CF87929F9B15D004A001F /* Notetaking.xcdatamodeld */,
 				233CF87729F9B15D004A001F /* Persistence.swift */,
-				233CF87C29F9B15D004A001F /* Notetaking.entitlements */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";

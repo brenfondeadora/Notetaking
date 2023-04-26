@@ -56,6 +56,16 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
     
+    func save() {
+       let viewContext = container.viewContext
+       do {
+         try viewContext.save()
+       } catch {
+         let nsError = error as NSError
+         fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+       }
+     }
+    
     func addNoteEntry() {
         let viewContext = container.viewContext
         let newItem = NoteEntry(context: viewContext)
@@ -63,15 +73,18 @@ struct PersistenceController {
         newItem.updatedAt = Date()
         newItem.title = "New note"
         newItem.content = "TBD"
-        
-        do {
-            try viewContext.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-        }
-        
+        save()
+    }
+    
+    func updateNoteEntry(noteEntry: NoteEntry, title:String, content: String) {
+        noteEntry.content = content
+        noteEntry.title = title
+        noteEntry.updatedAt = Date()
+        save()
+    }
+    
+    func deleteNoteEntry(noteEntry: NoteEntry) {
+        container.viewContext.delete(noteEntry)
+        save()
     }
 }
