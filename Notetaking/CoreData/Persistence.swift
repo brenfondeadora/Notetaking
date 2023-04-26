@@ -17,7 +17,8 @@ struct PersistenceController {
             let newItem = NoteEntry(context: viewContext)
             newItem.createdAt = Date()
             newItem.updatedAt = Date()
-            newItem.title = "New note"
+            newItem.title = "(Title)"
+            newItem.content = "(Content)"
         }
         do {
             try viewContext.save()
