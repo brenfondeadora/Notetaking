@@ -28,4 +28,4 @@ Mac app developed with SwiftUI using CoreData
 **Brenda Saavedra**
 
 - WebPage: [brendasaavedra.com](http://brendasaavedra.com)
-- Github: [@brenfondeadora](https://github.com/brenfondeadora/)
+- Github: [@brsaca](https://github.com/brsaca/)
